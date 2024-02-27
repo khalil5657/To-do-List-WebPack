@@ -1,0 +1,57 @@
+body{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin: 0 250px;
+}
+.sidebar{
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background-color: rgb(186, 186, 186);
+}
+.sidebar h1{
+    border-bottom: 1px solid rgb(61, 61, 61);
+    padding-bottom: 6px;
+    text-align: center;
+}
+.projects{ 
+    display: flex;
+    flex-direction: column; 
+}
+.project{
+    cursor: pointer;
+
+}
+.project:hover{
+    background-color: rgb(47, 47, 47);
+}
+h1 span{
+    color: white;
+    margin-left: 20px;
+    cursor: pointer;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+span{
+    margin-left: 20px;
+    cursor: pointer;
+    color: white;
+    padding: 4px;
+
+}
+.projectDiv{
+    display: flex;
+    justify-content: center;
+}
+span:hover{
+    background-color: rgb(35, 35, 35);
+    border-radius: 50%;
+}
+.todoitem{
+    display: flex;
+    
+}
