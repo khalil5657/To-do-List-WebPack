@@ -37,10 +37,25 @@ function loadProjects(){
                 return;
             }
             for (let todo of (allProjects[e.target.textContent])){
+                let container = document.createElement("div");
+                container.classList.add("todoitem");
+
                 let todotitle = document.createElement("div");
                 todotitle.textContent = todo.title;
                 todotitle.classList.add("todoitem");
-                content.appendChild(todotitle);
+                container.appendChild(todotitle);
+                let deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "delete";
+                function checkIndex(obj) {
+                    return obj == todo;
+                  }
+                deleteBtn.addEventListener("click", ()=>{
+                    let index = allProjects[e.target.textContent].findIndex(checkIndex);
+                    allProjects[e.target.textContent].splice(index, 1)
+                    container.remove()
+                })
+                container.appendChild(deleteBtn)
+                content.appendChild(container);
                 todotitle.addEventListener("click", ()=>{
                     console.log(todo)
                 })
