@@ -28,7 +28,21 @@ function loadProjects(){
             let thelist = e.target.previousSibling.innerHTML;
             createToDo(thelist)
         })
+        let deleteSpan = document.createElement("span");
+        deleteSpan.textContent = "-";
+        deleteSpan.addEventListener("click", (e)=>{
+            delete allProjects[key];
+            projectDiv.remove();
+        })
+        let editSpan = document.createElement("span");
+        editSpan.textContent = " : ";
+        editSpan.addEventListener("click", (e)=>{
+            renameProject(key)
+        })
+
         projectDiv.appendChild(span);
+        projectDiv.appendChild(deleteSpan);
+        projectDiv.appendChild(editSpan)
         project.addEventListener("click", (e)=>{
             while (content.firstChild){
                 content.removeChild(content.firstChild)
@@ -155,4 +169,32 @@ function createProject(){
 function addProject(title){
     allProjects[title.value] = [];
     loadProjects()
+}
+function renameProject(oldname){
+        while (content.firstChild){
+            content.removeChild(content.firstChild)
+        }
+        let form = document.createElement("div");
+        form.classList.add("form");
+        content.appendChild(form);
+    
+        let titleLabel = document.createElement("label");
+        titleLabel.textContent = "Title";
+        form.appendChild(titleLabel)
+        let title = document.createElement("input");
+        title.value = oldname;
+        form.appendChild(title);
+    
+        let submit = document.createElement("button");
+        submit.textContent = "Add";
+        submit.addEventListener("click", function(){
+            changeName(title, oldname);
+        }) 
+        form.appendChild(submit);
+    
+}
+function changeName(title, oldname){
+    Object.assign(allProjects, { [title.value]: allProjects[oldname] });
+            delete allProjects[oldname];
+            loadProjects()
 }
