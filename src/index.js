@@ -8,7 +8,7 @@ function createToDoItem(title, description, priority, date){
     this.title = title;
     this.description = description;
     this.priority = priority;
-    this.date = date;
+    this.dateDue = date;
 }
 loadProjects()
 function loadProjects(){
@@ -69,6 +69,13 @@ function loadProjects(){
                     container.remove()
                 })
                 container.appendChild(deleteBtn)
+                let editBtn = document.createElement("button");
+                editBtn.textContent = "Edit";
+                editBtn.addEventListener("click", function(){
+                    let index =  allProjects[key].findIndex(checkIndex);
+                    editToDo(todo, index, key)
+                })
+                container.appendChild(editBtn)
                 content.appendChild(container);
                 todotitle.addEventListener("click", ()=>{
                     console.log(todo)
@@ -197,4 +204,83 @@ function changeName(title, oldname){
     Object.assign(allProjects, { [title.value]: allProjects[oldname] });
             delete allProjects[oldname];
             loadProjects()
+}
+
+function editToDo(todo, index, key){
+    editToDoForm(todo, key, index)
+}
+function editToDoForm(todo, list, index){
+        while (content.firstChild){
+            content.removeChild(content.firstChild)
+        }
+        let form = document.createElement("div");
+        form.classList.add("form");
+        content.appendChild(form);
+    
+        let titleLabel = document.createElement("label");
+        titleLabel.textContent = "Title";
+        form.appendChild(titleLabel)
+        let title = document.createElement("input");
+        title.value = todo.title;
+        form.appendChild(title);
+    
+        let descriptionLabel = document.createElement("label");
+        form.appendChild(descriptionLabel)
+        let description = document.createElement("textarea");
+        description.value = todo.description;
+        form.appendChild(description);
+    
+        let dateLabel = document.createElement("label");
+        dateLabel.textContent = "Date Due";
+        form.appendChild(dateLabel)
+        let date = document.createElement("input");
+        date.setAttribute("type", "date");
+        let dd = todo.dateDue.replaceAll("/", "-").split("-").reverse().join("-")
+        date.setAttribute("value", dd)
+        form.appendChild(date);    
+    
+        let priorityLabel = document.createElement("label");
+        priorityLabel.textContent = "Priority";
+        form.appendChild(priorityLabel)
+        let priority = document.createElement("select");
+        priority.setAttribute("class", "selected");
+        // priority.value = todo.priority;
+        form.appendChild(priority);
+    
+        
+
+        let option1 = document.createElement("option");
+        option1.textContent = "High";
+        option1.setAttribute("value", "high");
+        priority.appendChild(option1)
+        let option2 = document.createElement("option");
+        option2.textContent = "Meduim";
+        option2.setAttribute("value", "meduim");
+        priority.appendChild(option2)
+        let option3 = document.createElement("option");
+        option3.textContent = "Low";
+        option3.setAttribute("value", "low");
+        priority.appendChild(option3)
+    
+        switch (todo.priority){
+            case ("high"):
+                option1.setAttribute('selected', "selected")
+                break
+            case ("meduim"):
+                option2.setAttribute('selected', 'selected')
+                break
+            case ("low"):
+                option3.setAttribute('selected', "selected")
+                break
+            
+        }
+
+        let submit = document.createElement("button");
+        submit.textContent = "Add";
+        submit.addEventListener("click", function(){
+            allProjects[list].splice(index, 1);
+            addToDo(title, description, priority, list, date);
+        }) 
+        form.appendChild(submit);
+    
 }
