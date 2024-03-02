@@ -1,14 +1,31 @@
 import "./style.css";
 import { format } from "date-fns";
 const projects = document.querySelector(".projects");
+const all = document.querySelector(".all");
 const content = document.querySelector(".content");
 const add = document.querySelector("h1 span");
-let allProjects = {MyTasks: [{title: "go to gym", description: "you must go to gym and train", priority: "high", dateDue: "24/10/2003"}]}
+let allProjects = {}
+// if (localStorage.getItem("listData") == null){
+//     console.log("add default")
+//     allProjects = {MyTasks: [{title: "go to gym", description: "you must go to gym and train", priority: "high", dateDue: "24/10/2003"}]}
+//     console.log(allProjects)
+   
+// }else{
+//     allProjects = JSON.parse(localStorage.getItem("listData"))
+//     console.log(allProjects)
+// }
+
+if (localStorage.getItem("listData10") != null){
+    allProjects = JSON.parse(localStorage.getItem("listData10"))
+}else{
+    allProjects = {MyTasks: [{title: "go to gym", description: "you must go to gym and train", priority: "high", dateDue: "24/10/2003", complete: "no"}]}
+}
 function createToDoItem(title, description, priority, date){
     this.title = title;
     this.description = description;
     this.priority = priority;
     this.dateDue = date;
+    this.complete = "no"
 }
 loadProjects()
 function loadProjects(){
@@ -32,6 +49,7 @@ function loadProjects(){
         deleteSpan.textContent = "-";
         deleteSpan.addEventListener("click", (e)=>{
             delete allProjects[key];
+            localStorage.setItem("listData10", JSON.stringify(allProjects))
             projectDiv.remove();
         })
         let editSpan = document.createElement("span");
@@ -51,12 +69,18 @@ function loadProjects(){
                 return;
             }
             for (let todo of (allProjects[e.target.textContent])){
+                
                 let container = document.createElement("div");
                 container.classList.add("todoitem");
 
                 let todotitle = document.createElement("div");
                 todotitle.textContent = todo.title;
                 todotitle.classList.add("todoitem");
+                if (todo.complete == "yes"){
+                    todotitle.classList.add("completed")
+                }else{
+                    todotitle.classList.remove("completed");
+                }
                 container.appendChild(todotitle);
                 let deleteBtn = document.createElement("button");
                 deleteBtn.textContent = "delete";
@@ -66,6 +90,7 @@ function loadProjects(){
                 deleteBtn.addEventListener("click", ()=>{
                     let index = allProjects[e.target.textContent].findIndex(checkIndex);
                     allProjects[e.target.textContent].splice(index, 1)
+                    localStorage.setItem("listData10", JSON.stringify(allProjects))
                     container.remove()
                 })
                 container.appendChild(deleteBtn)
@@ -76,6 +101,25 @@ function loadProjects(){
                     editToDo(todo, index, key)
                 })
                 container.appendChild(editBtn)
+                let completedBtn = document.createElement("button");
+                completedBtn.textContent = "Complete!";
+                completedBtn.addEventListener("click", ()=>{
+                    if (todo.complete == "no"){
+                        let index = allProjects[e.target.textContent].findIndex(checkIndex);
+                        todo.complete = "yes"
+                        localStorage.setItem("listData10", JSON.stringify(allProjects))
+                    }else{
+                        let index = allProjects[e.target.textContent].findIndex(checkIndex);
+                        todo.complete = "no"
+                        localStorage.setItem("listData10", JSON.stringify(allProjects))
+                    }
+                    if (todo.complete == "yes"){
+                        todotitle.classList.add("completed")
+                    }else{
+                        todotitle.classList.remove("completed");
+                    }
+                })
+                container.appendChild(completedBtn)
                 content.appendChild(container);
                 todotitle.addEventListener("click", ()=>{
                     console.log(todo)
@@ -90,6 +134,7 @@ function addToDo(title, desc, priority, list, date){
     let todo = new createToDoItem(title.value, desc.value, priority.value, thedate);
     let project = allProjects[list];
     project[project.length] = todo;
+    localStorage.setItem("listData10", JSON.stringify(allProjects))
 }
 
 add.addEventListener("click", function(){
@@ -148,7 +193,6 @@ function createToDo(list){
         addToDo(title, description, priority, list, date);
     }) 
     form.appendChild(submit);
-
 }
 
 function createProject(){
@@ -174,7 +218,9 @@ function createProject(){
     form.appendChild(submit);
 }
 function addProject(title){
-    allProjects[title.value] = [];
+    let newOne = title.value
+    allProjects[newOne] = [];
+    localStorage.setItem("listData10", JSON.stringify(allProjects))
     loadProjects()
 }
 function renameProject(oldname){
@@ -203,7 +249,9 @@ function renameProject(oldname){
 function changeName(title, oldname){
     Object.assign(allProjects, { [title.value]: allProjects[oldname] });
             delete allProjects[oldname];
+            localStorage.setItem("listData10", JSON.stringify(allProjects))
             loadProjects()
+
 }
 
 function editToDo(todo, index, key){
@@ -279,8 +327,18 @@ function editToDoForm(todo, list, index){
         submit.textContent = "Add";
         submit.addEventListener("click", function(){
             allProjects[list].splice(index, 1);
+            localStorage.setItem("dataList", JSON.stringify(allProjects))
             addToDo(title, description, priority, list, date);
         }) 
         form.appendChild(submit);
     
 }
+
+function saveData(){
+    localStorage.setItem("data", all.innerHTML);
+
+}
+function loadData(){
+    all.innerHTML = localStorage.getItem("data")
+}
+

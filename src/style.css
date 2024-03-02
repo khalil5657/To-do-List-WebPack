@@ -55,3 +55,8 @@ span:hover{
     display: flex;
     
 }
+.completed{
+    text-decoration: line-through;
+    text-decoration-color: gray;
+    text-decoration-thickness: 2px;
+}
