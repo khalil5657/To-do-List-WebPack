@@ -1,5 +1,5 @@
 import { allProjects } from "./index";
-import { loadProjects } from "./projects"
+import { loadProjects } from "./dom"
 import { format } from "date-fns";
 
 function createToDoItem(title, description, priority, date){
@@ -22,7 +22,7 @@ export function addProject(title){
     let newOne = title.value
     allProjects[newOne] = [];
     localStorage.setItem("listData10", JSON.stringify(allProjects))
-    loadProjects()
+    loadProjects(allProjects)
 }
 
 export function deleteProject(allProjects, key){

@@ -5,6 +5,8 @@ import { addProject } from "./applogic";
 import { allProjects } from "./index";
 import { deleteProject } from "./applogic";
 import { deleteToDo } from "./applogic";
+import icon from "./assets/file-2-svgrepo-com.svg"
+
 export function loadProjects(allProjects){
     while (projects.firstChild){
         projects.removeChild(projects.firstChild)
@@ -14,20 +16,36 @@ export function loadProjects(allProjects){
         let projectDiv = document.createElement("div");
         projectDiv.classList.add("projectDiv");
         // create project
+        let projectContainer = document.createElement("div");
         let project = document.createElement("div");
         project.textContent = key;
-        project.classList.add("project");
+        let img = document.createElement("img");
+        img.src = icon;
+        img.style.width = "15px"
+        img.style.height = "15px"
+
+        projectContainer.style.display = "flex";
+        projectContainer.style.justifyContent = "left";
+        projectContainer.style.alignItems = "center"
+        projectContainer.style.gap = "8px"
+        projectContainer.style.paddingLeft = "10px"
+
+        projectContainer.appendChild(img)
+        projectContainer.appendChild(project)
+        projectContainer.classList.add("project");
         // add project title to project div
-        projectDiv.appendChild(project);
+        projectDiv.appendChild(projectContainer);
         // create project button to add a ToDo
         let span = document.createElement("span");
+        span.style.flex = "1"
         span.textContent = "+";
         span.addEventListener("click", (e)=>{
-            let thelist = e.target.previousSibling.innerHTML;
+            let thelist = key;
             createToDo(thelist)
         })
         // create project button to delete a project
         let deleteSpan = document.createElement("span");
+        deleteSpan.style.flex = "1"
         deleteSpan.textContent = "-";
         deleteSpan.addEventListener("click", (e)=>{
             deleteProject(allProjects, key);
@@ -35,6 +53,7 @@ export function loadProjects(allProjects){
         })
         // create project button to rename a project
         let editSpan = document.createElement("span");
+        editSpan.style.flex = "1"
         editSpan.textContent = " : ";
         editSpan.addEventListener("click", (e)=>{
             renameProject(key)
@@ -44,7 +63,7 @@ export function loadProjects(allProjects){
         projectDiv.appendChild(deleteSpan);
         projectDiv.appendChild(editSpan)
 
-        project.addEventListener("click", (e)=>{
+        projectContainer.addEventListener("click", (e)=>{
             while (content.firstChild){
                 content.removeChild(content.firstChild)
             }
@@ -52,10 +71,14 @@ export function loadProjects(allProjects){
                 return;
             }
 
-            for (let todo of (allProjects[e.target.textContent])){
+            for (let todo of (allProjects[key])){
                 // create container div to contain every todo of the selected project
                 let container = document.createElement("div");
-                container.classList.add("todoitem");
+                container.classList.add("todoitem2");
+                let firstDiv = document.createElement("div");
+                container.appendChild(firstDiv)
+                let secondDiv = document.createElement("div");
+                container.appendChild(secondDiv);
 
                 let todotitle = document.createElement("div");
                 todotitle.textContent = todo.title;
@@ -66,37 +89,39 @@ export function loadProjects(allProjects){
                 }else{
                     todotitle.classList.remove("completed");
                 }
-                container.appendChild(todotitle);
+                firstDiv.appendChild(todotitle);
                 // create a delete button to delete todo
                 let deleteBtn = document.createElement("button");
                 deleteBtn.textContent = "delete";
+                deleteBtn.classList.add("deleteBtn")
                 function checkIndex(obj) {
                     return obj == todo;
                   }
                 deleteBtn.addEventListener("click", ()=>{
-                    let index = allProjects[e.target.textContent].findIndex(checkIndex);
-                    deleteToDo(allProjects, index, e.target.textContent)
+                    let index = allProjects[key].findIndex(checkIndex);
+                    deleteToDo(allProjects, index, key)
                     container.remove()
                 })
-                container.appendChild(deleteBtn)
+                secondDiv.appendChild(deleteBtn)
                 // create an edit button to edit a todo
                 let editBtn = document.createElement("button");
                 editBtn.textContent = "Edit";
+                editBtn.classList.add("editBtn")
                 editBtn.addEventListener("click", function(){
                     let index =  allProjects[key].findIndex(checkIndex);
                     editToDo(todo, index, key)
                 })
-                container.appendChild(editBtn)
+                secondDiv.appendChild(editBtn)
                 // create a button to toggle a todo if completed
                 let completedBtn = document.createElement("button");
                 completedBtn.textContent = "Complete!";
                 completedBtn.addEventListener("click", ()=>{
                     if (todo.complete == "no"){
-                        let index = allProjects[e.target.textContent].findIndex(checkIndex);
+                        let index = allProjects[key].findIndex(checkIndex);
                         todo.complete = "yes"
                         localStorage.setItem("listData10", JSON.stringify(allProjects))
                     }else{
-                        let index = allProjects[e.target.textContent].findIndex(checkIndex);
+                        let index = allProjects[key].findIndex(checkIndex);
                         todo.complete = "no"
                         localStorage.setItem("listData10", JSON.stringify(allProjects))
                     }
@@ -106,7 +131,7 @@ export function loadProjects(allProjects){
                         todotitle.classList.remove("completed");
                     }
                 })
-                container.appendChild(completedBtn)
+                secondDiv.appendChild(completedBtn)
                 // add the todo container to content space
                 content.appendChild(container);
 
@@ -140,6 +165,8 @@ function createToDo(list){
     let descriptionLabel = document.createElement("label");
     form.appendChild(descriptionLabel)
     let description = document.createElement("textarea");
+
+
     form.appendChild(description);
 
     let dateLabel = document.createElement("label");
@@ -147,6 +174,7 @@ function createToDo(list){
     form.appendChild(dateLabel)
     let date = document.createElement("input");
     date.setAttribute("type", "date");
+
     form.appendChild(date);    
 
     let priorityLabel = document.createElement("label");
@@ -208,6 +236,7 @@ function editToDoForm(todo, list, index){
     date.setAttribute("type", "date");
     let dd = todo.dateDue.replaceAll("/", "-").split("-").reverse().join("-")
     date.setAttribute("value", dd)
+    date.setAttribute("required", "required")
     form.appendChild(date);    
 
     let priorityLabel = document.createElement("label");
@@ -269,6 +298,8 @@ export function createProject(){
     form.appendChild(titleLabel)
     let title = document.createElement("input");
     title.setAttribute("placeholder", "Title");
+    title.setAttribute("maxlength", "10");
+
     form.appendChild(title);
 
     let submit = document.createElement("button");
