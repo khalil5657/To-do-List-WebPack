@@ -5,7 +5,11 @@ import { addProject } from "./applogic";
 import { allProjects } from "./index";
 import { deleteProject } from "./applogic";
 import { deleteToDo } from "./applogic";
+import { setToDoState} from "./applogic";
+import { changeProjectName } from "./applogic";
+import { changeName } from "./applogic";
 import icon from "./assets/file-2-svgrepo-com.svg"
+import dateicon from "./assets/date-range-svgrepo-com.svg"
 
 export function loadProjects(allProjects){
     while (projects.firstChild){
@@ -19,6 +23,7 @@ export function loadProjects(allProjects){
         let projectContainer = document.createElement("div");
         let project = document.createElement("div");
         project.textContent = key;
+        project.classList.add("projectTitle")
         let img = document.createElement("img");
         img.src = icon;
         img.style.width = "15px"
@@ -83,7 +88,7 @@ export function loadProjects(allProjects){
                 let todotitle = document.createElement("div");
                 todotitle.textContent = todo.title;
                 todotitle.classList.add("todoitem");
-                // check if todo is completed to add line throw as checked
+                // check if todo is completed to add line-through as checked
                 if (todo.complete == "yes"){
                     todotitle.classList.add("completed")
                 }else{
@@ -112,31 +117,46 @@ export function loadProjects(allProjects){
                     editToDo(todo, index, key)
                 })
                 secondDiv.appendChild(editBtn)
-                // create a button to toggle a todo if completed
-                let completedBtn = document.createElement("button");
-                completedBtn.textContent = "Complete!";
-                completedBtn.addEventListener("click", ()=>{
-                    if (todo.complete == "no"){
-                        let index = allProjects[key].findIndex(checkIndex);
-                        todo.complete = "yes"
-                        localStorage.setItem("listData10", JSON.stringify(allProjects))
+                // add a toggle button to set if todo is complete
+                let completedBtn = document.createElement("label");
+                completedBtn.classList.add("toggle");
+                let aninput = document.createElement("input");
+                aninput.setAttribute("type", "checkbox");
+                let anspan = document.createElement("span");
+                anspan.classList.add("slider");
+                completedBtn.appendChild(aninput);
+                completedBtn.appendChild(anspan);
+                secondDiv.appendChild(completedBtn)
+                // set toggle button state to same as todo state
+                if (todo.complete == "yes"){
+                    aninput.checked = true
+                }else{
+                    aninput.checked = false
+                }
+                aninput.addEventListener('click', ()=>{
+                    // changing todo state as button clicked 
+                    if (aninput.checked == true){
+                        setToDoState(todo, "yes")
+
                     }else{
-                        let index = allProjects[key].findIndex(checkIndex);
-                        todo.complete = "no"
-                        localStorage.setItem("listData10", JSON.stringify(allProjects))
+                        setToDoState(todo, "no")
+
                     }
+                    // adding line-through if todo is complete
                     if (todo.complete == "yes"){
                         todotitle.classList.add("completed")
                     }else{
                         todotitle.classList.remove("completed");
                     }
                 })
-                secondDiv.appendChild(completedBtn)
+
+                
+
                 // add the todo container to content space
                 content.appendChild(container);
 
-                todotitle.addEventListener("click", ()=>{
-                    console.log(todo)
+                todotitle.addEventListener("click", function(){
+                    showToDo(todo)
                 })
             }
         })
@@ -244,7 +264,6 @@ function editToDoForm(todo, list, index){
     form.appendChild(priorityLabel)
     let priority = document.createElement("select");
     priority.setAttribute("class", "selected");
-    // priority.value = todo.priority;
     form.appendChild(priority);
 
     
@@ -298,7 +317,7 @@ export function createProject(){
     form.appendChild(titleLabel)
     let title = document.createElement("input");
     title.setAttribute("placeholder", "Title");
-    title.setAttribute("maxlength", "10");
+    title.setAttribute("maxlength", "9");
 
     form.appendChild(title);
 
@@ -323,6 +342,7 @@ function renameProject(oldname){
     form.appendChild(titleLabel)
     let title = document.createElement("input");
     title.value = oldname;
+    title.setAttribute("maxlength", "9");
     form.appendChild(title);
 
     let submit = document.createElement("button");
@@ -334,11 +354,7 @@ function renameProject(oldname){
 
 }
 
-function changeName(title, oldname){
-            changeProjectName(title, oldname);
-            loadProjects()
 
-}
 
 
 function editToDo(todo, index, key){
@@ -346,7 +362,68 @@ function editToDo(todo, index, key){
 }
 
 
+function showToDo(todo){
+    while (content.firstChild){
+        content.removeChild(content.firstChild)
+    }
+    let main = document.createElement("div")
+    main.classList.add('main');
+    content.appendChild(main);
 
+    let theTitle = document.createElement("div");
+    theTitle.classList.add("theTitle");
+    theTitle.textContent = todo.title
+    main.appendChild(theTitle);
+
+    let desc = document.createElement("div");
+    desc.classList.add("desc");
+    desc.textContent = todo.description;
+    main.appendChild(desc);
+    
+    let info = document.createElement("div");
+    info.classList.add("info")
+
+    let thePriority = document.createElement("div");
+    thePriority.classList.add("thePriority")
+    info.appendChild(thePriority);
+    let thePriorityDiv = document.createElement("div");
+    thePriorityDiv.classList.add("thePriorityDiv");
+    thePriorityDiv.textContent = todo.priority;
+
+    switch (todo.priority){
+        case "high":
+            thePriorityDiv.style.color = "red"
+            thePriorityDiv.style.borderColor = "red";
+            break;
+        case "meduim":
+            thePriorityDiv.style.color = "yellow"
+            thePriorityDiv.style.borderColor = "yellow";
+            break;
+        case "low":
+            thePriorityDiv.style.color = "green"
+            thePriorityDiv.style.borderColor = "green";
+            break;
+        
+    }
+
+    thePriority.appendChild(thePriorityDiv)
+
+
+    let theDate = document.createElement("div");
+    theDate.classList.add("theDate");
+    info.appendChild(theDate);
+    let theDateImg = document.createElement("img");
+    theDateImg.src = dateicon;
+    theDateImg.style.width = "25px"
+    theDateImg.style.height = "25px"
+
+    theDate.appendChild(theDateImg)
+    let theDateText = document.createElement("div");
+    theDateText.textContent = todo.dateDue;
+    theDate.appendChild(theDateText)
+
+    main.appendChild(info)
+}
 
 
 

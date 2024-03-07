@@ -3,6 +3,18 @@ body{
     margin: 0 300px;
     background-color: #FFF8E3;
 }
+button{
+    cursor: pointer;
+}
+.logoDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logoDiv img{
+    margin-right: 5px;
+    margin-left: -3px;
+}
 .sidebar{
     position: fixed;
     left: 0;
@@ -17,6 +29,7 @@ body{
     border-bottom: 1px solid #3D3B40;
     padding-bottom: 6px;
     text-align: center;
+    font-size: 38px;
 }
 .projects{ 
     display: flex;
@@ -39,6 +52,10 @@ h1 span{
     display: flex;
     flex-direction: column;
     row-gap: 20px;
+    background-color: #3D3B40;
+    border-radius: 8px;
+    padding: 15px 15px;
+    box-shadow: 3px 3px 2px rgb(111, 110, 110);
 }
 span{
     cursor: pointer;
@@ -51,9 +68,9 @@ span{
     display: flex;
     justify-content: center;
 }
-span:hover{
+.projectDiv span:hover{
     background-color: #3D3B40;
-    border-radius: 50%;
+    /* border-radius: 50%; */
 }
 .todoitem2{
     display: grid;
@@ -66,13 +83,14 @@ span:hover{
     padding: 10px 10px 10px 10px;
     font-size: 22px;
     font-weight: bold;
-    border: 2px solid orange;
-    box-shadow: 3px 3px 2px orange;
+    /* border: 2px solid orange; */
+    box-shadow: 4px 4px 3px gray;
 }
 .completed{
     text-decoration: line-through;
     text-decoration-color: orange;
     text-decoration-thickness: 4px;
+    opacity: 0.7;
 }
 .projectDiv div{
     text-align: center;
@@ -100,7 +118,7 @@ span:hover{
     margin-top: 15px;
 }
 .deleteBtn{
-    background-color: red;
+    background-color: #f81212;
     border: none;
     color: white;
     border-radius: 2px;
@@ -121,6 +139,173 @@ span:hover{
     margin-top: 20px;
     margin-right: 10px;
 }
-.completeBtn{
+.editBtn:hover{
+    opacity: 0.8;
+}
+.deleteBtn:hover{
+    opacity: 0.8;
+}
+.editBtn:active{
+    opacity: 0.4;
+}
+.deleteBtn:active{
+    opacity: 0.4;
+}
+
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 20px;
+}
+ 
+/* Hide the checkbox input */
+.toggle input {
+    display: none;
+}
+ 
+/* Describe slider's look and position. */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: -10px;
+    background-color: gray;
+    transition: .4s;
+    border-radius: 34px;
     
+}
+ 
+/* Describe the white ball's location 
+      and appearance in the slider. */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+ 
+/* Modify the slider's background color to 
+      green once the checkbox has been selected. */
+input:checked+.slider {
+    background-color: orange;
+}
+ 
+/* When the checkbox is checked, shift the 
+      white ball towards the right within the slider. */
+input:checked+.slider:before {
+    transform: translateX(26px);
+}
+.main{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 4fr 1fr;
+    font-size: 22px;
+    background-color: #3D3B40;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 3px 3px 2px rgb(111, 110, 110);
+
+}
+.theTitle{
+    font-weight: bold;
+    border-bottom: 2px solid orange;
+    padding: 4px;
+}
+.desc{
+    color: rgb(184, 183, 183);
+    border-bottom: 2px solid orange;
+    padding: 4px;
+}
+.info{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 5px;
+}
+.theDate{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.thePriority{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+.thePriorityDiv{
+    height: 80%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-width: 1px;
+    border: solid;
+    padding: 2px;
+}
+.theDate img{
+    margin-right: 10px;
+}
+.projectTitle{
+    font-size: 20px;
+}
+.todoitem{
+    cursor: pointer;
+}
+label{
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+input{
+    border-radius: 4px;
+    border: none;
+    padding: 4px;
+    height: 24px;
+    outline: none;
+    font-size: 18px;
+}
+.form button{
+    background-color: orange;
+    color: white;
+    border: none;
+    padding: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 18px;
+    transition: all 0.4s;
+}
+.form button:hover{
+    opacity: 0.7;
+}
+.form button:active{
+    opacity: 0.4;
+}
+textarea{
+    font-size: 18px;
+    border-radius: 4px;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100px;
+}
+.selected {
+    border: none;
+    appearance: none;
+    height: 30px;
+    background-color: white;
+    color: black;
+    outline: none;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    padding: 5px;
+    cursor: pointer;
 }

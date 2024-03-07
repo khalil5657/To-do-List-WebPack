@@ -35,8 +35,17 @@ export function deleteToDo(allProjects, index, key){
      localStorage.setItem("listData10", JSON.stringify(allProjects))
 }
 
-export function changeProjectName(){
+export function changeProjectName(title, oldname){
     Object.assign(allProjects, { [title.value]: allProjects[oldname] });
             delete allProjects[oldname];
             localStorage.setItem("listData10", JSON.stringify(allProjects))
+}
+
+export function setToDoState(todo, state){
+    todo.complete = state
+    localStorage.setItem("listData10", JSON.stringify(allProjects))
+}
+export function changeName(title, oldname){
+    changeProjectName(title, oldname);      
+    loadProjects(allProjects)
 }
