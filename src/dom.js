@@ -170,7 +170,7 @@ function createToDo(list){
     while (content.firstChild){
         content.removeChild(content.firstChild)
     }
-    // create the formof ToDo
+    // create the form of ToDo
     let form = document.createElement("div");
     form.classList.add("form");
     content.appendChild(form);
@@ -220,6 +220,7 @@ function createToDo(list){
     let submit = document.createElement("button");
     submit.textContent = "Add";
     submit.addEventListener("click", function(){
+        // when submitted call addToDo function
         addToDo(title, description, priority, list, date);
     }) 
     form.appendChild(submit);
@@ -229,6 +230,7 @@ function createToDo(list){
 
 
 function editToDoForm(todo, list, index){
+    // create edit todo form
     while (content.firstChild){
         content.removeChild(content.firstChild)
     }
@@ -305,6 +307,7 @@ function editToDoForm(todo, list, index){
 }
 
 export function createProject(){
+    // create a new project form
     while (content.firstChild){
         content.removeChild(content.firstChild)
     }
@@ -330,6 +333,7 @@ export function createProject(){
 }
 
 function renameProject(oldname){
+    // create rename a project form
     while (content.firstChild){
         content.removeChild(content.firstChild)
     }
@@ -363,6 +367,7 @@ function editToDo(todo, index, key){
 
 
 function showToDo(todo){
+    // show a todo item data
     while (content.firstChild){
         content.removeChild(content.firstChild)
     }
