@@ -10,7 +10,10 @@ import { changeProjectName } from "./applogic";
 import { changeName } from "./applogic";
 import icon from "./assets/file-2-svgrepo-com.svg"
 import dateicon from "./assets/date-range-svgrepo-com.svg"
-
+import deleteicon from "./assets/delete-svgrepo-com.svg"
+import editicon from "./assets/edit-svgrepo-com.svg"
+import homeicon from "./assets/pngegg.png"
+import addicon from "./assets/add-to-queue-svgrepo-com.svg"
 export function loadProjects(allProjects){
     while (projects.firstChild){
         projects.removeChild(projects.firstChild)
@@ -43,7 +46,10 @@ export function loadProjects(allProjects){
         // create project button to add a ToDo
         let span = document.createElement("span");
         span.style.flex = "1"
-        span.textContent = "+";
+        span.classList.add("addSpan");
+        let addImg = document.createElement("img");
+        addImg.src = addicon;
+        span.appendChild(addImg)
         span.addEventListener("click", (e)=>{
             let thelist = key;
             createToDo(thelist)
@@ -51,7 +57,10 @@ export function loadProjects(allProjects){
         // create project button to delete a project
         let deleteSpan = document.createElement("span");
         deleteSpan.style.flex = "1"
-        deleteSpan.textContent = "-";
+        deleteSpan.classList.add("deleteSpan");
+        let deleteImg = document.createElement("img");
+        deleteImg.src = deleteicon;
+        deleteSpan.appendChild(deleteImg)
         deleteSpan.addEventListener("click", (e)=>{
             deleteProject(allProjects, key);
             projectDiv.remove();
@@ -59,7 +68,10 @@ export function loadProjects(allProjects){
         // create project button to rename a project
         let editSpan = document.createElement("span");
         editSpan.style.flex = "1"
-        editSpan.textContent = " : ";
+        editSpan.classList.add("editSpan");
+        let editImg = document.createElement("img");
+        editImg.src = editicon;
+        editSpan.appendChild(editImg)
         editSpan.addEventListener("click", (e)=>{
             renameProject(key)
         })
@@ -72,10 +84,14 @@ export function loadProjects(allProjects){
             while (content.firstChild){
                 content.removeChild(content.firstChild)
             }
+            let listname = document.createElement("h1")
+            listname.classList.add("listname")
+            listname.textContent = key;
+            content.appendChild(listname)
             if ((allProjects[key]).length == 0){
                 return;
             }
-
+            
             for (let todo of (allProjects[key])){
                 // create container div to contain every todo of the selected project
                 let container = document.createElement("div");
@@ -170,9 +186,15 @@ function createToDo(list){
     while (content.firstChild){
         content.removeChild(content.firstChild)
     }
+    let formFunction = document.createElement("div")
+    formFunction.classList.add("formFunction");
+    formFunction.textContent = "Create a task" 
+    content.appendChild(formFunction)
     // create the form of ToDo
     let form = document.createElement("div");
     form.classList.add("form");
+    form.style.marginTop = "0px"
+
     content.appendChild(form);
 
     let titleLabel = document.createElement("label");
@@ -234,8 +256,15 @@ function editToDoForm(todo, list, index){
     while (content.firstChild){
         content.removeChild(content.firstChild)
     }
+    let formFunction = document.createElement("div")
+    formFunction.classList.add("formFunction");
+    formFunction.textContent = "Edit a task" 
+    content.appendChild(formFunction)
+
     let form = document.createElement("div");
     form.classList.add("form");
+    form.style.marginTop = "0px"
+
     content.appendChild(form);
 
     let titleLabel = document.createElement("label");
@@ -311,8 +340,14 @@ export function createProject(){
     while (content.firstChild){
         content.removeChild(content.firstChild)
     }
+    let formFunction = document.createElement("div")
+    formFunction.classList.add("formFunction");
+    formFunction.textContent = "Create a Project" 
+    content.appendChild(formFunction)
     let form = document.createElement("div");
     form.classList.add("form");
+    form.style.marginTop = "0px"
+
     content.appendChild(form);
 
     let titleLabel = document.createElement("label");
@@ -337,6 +372,11 @@ function renameProject(oldname){
     while (content.firstChild){
         content.removeChild(content.firstChild)
     }
+    let formFunction = document.createElement("div")
+    formFunction.classList.add("formFunction");
+    formFunction.textContent = "Rename a Project" 
+    formFunction.style.marginBottom = "40px"
+    content.appendChild(formFunction)
     let form = document.createElement("div");
     form.classList.add("form");
     content.appendChild(form);
@@ -430,5 +470,24 @@ function showToDo(todo){
     main.appendChild(info)
 }
 
+export function homePage(){
+    while (content.firstChild){
+        content.removeChild(content.firstChild)
+    }
+    let main = document.createElement("div");
+    main.classList.add("homeMain");
 
+    let first = document.createElement("div");
+    first.classList.add("first");
+    let firstImg = document.createElement("img");
+    firstImg.src = homeicon;
+    first.appendChild(firstImg)
+    main.appendChild(first)
+
+    let second = document.createElement("div");
+    second.classList.add("second");
+    second.textContent = "Create a new list by clicking the + button or select an existing one to start adding your tasks."
+    main.appendChild(second)
+    content.appendChild(main)
+}
 
